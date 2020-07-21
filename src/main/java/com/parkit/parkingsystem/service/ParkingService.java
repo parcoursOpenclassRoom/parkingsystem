@@ -6,6 +6,7 @@ import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.util.InputReaderUtil;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +28,9 @@ public class ParkingService {
         this.ticketDAO = ticketDAO;
     }
 
+    /**
+     * process of an incoming vehicle
+     */
     public void processIncomingVehicle() {
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
@@ -59,6 +63,9 @@ public class ParkingService {
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
+    /**
+     * check if the next parking number is available
+     */
     public ParkingSpot getNextParkingNumberIfAvailable(){
         int parkingNumber=0;
         ParkingSpot parkingSpot = null;
@@ -97,11 +104,17 @@ public class ParkingService {
         }
     }
 
+    /**
+     * outgoing vehicle process
+     */
     public void processExitingVehicle() {
         try{
             String vehicleRegNumber = getVehichleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
+            // if the exit time is equal to the entry time, a minute is added for billing
+            if(outTime.before(ticket.getInTime()))
+                outTime = DateUtils.addMinutes(outTime,1);
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket);
             if(ticketDAO.updateTicket(ticket)) {
