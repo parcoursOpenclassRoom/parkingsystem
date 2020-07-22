@@ -8,6 +8,7 @@ public class Ticket {
     private ParkingSpot parkingSpot;
     private String vehicleRegNumber;
     private double price;
+    private double discount;
     private Date inTime;
     private Date outTime;
 
@@ -57,6 +58,14 @@ public class Ticket {
 
     public void setOutTime(Date outTime) {
         this.outTime = outTime;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 
     @Override

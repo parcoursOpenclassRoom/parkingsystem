@@ -156,4 +156,42 @@ public class FareCalculatorServiceTest {
         assertEquals( 0 , ticket.getPrice());
     }
 
+    @Test
+    public void calculateFareBikeWith5PercenDiscountFor24HParkingTime(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) ); // 24H parking time
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+
+        int discount = 5;
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setDiscount(discount);
+        // calculate the fare with 5% de discount for 24H the time parking
+        fareCalculatorService.calculateFare(ticket);
+        double total = 24 * Fare.BIKE_RATE_PER_HOUR;
+        double price = (total) - (total * 5/100);
+        assertEquals( price , ticket.getPrice());
+    }
+
+    @Test
+    public void calculateFareCarWith5PercenDiscountFor24HParkingTime(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  48 * 60 * 60 * 1000) ); // 48H parking time
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+        int discount = 5;
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setDiscount(discount);
+        // calculate the fare with 5% de discount for 24H the time parking
+        fareCalculatorService.calculateFare(ticket);
+        double total = 48 * Fare.CAR_RATE_PER_HOUR;
+        double price = (total) - (total * 5/100);
+        assertEquals( price , ticket.getPrice());
+    }
+
 }
