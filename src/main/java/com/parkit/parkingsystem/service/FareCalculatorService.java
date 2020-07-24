@@ -19,19 +19,19 @@ public class FareCalculatorService {
         //TODO: Some tests are failing here. Need to check if this logic is correct
         int freeMinutes = 30;
         int duration = (int) Duration.between(DateUtil.convertToLocalDateTime(ticket.getInTime()),
-                                              DateUtil.convertToLocalDateTime(ticket.getOutTime()))
-                                                .toMinutes();
+                DateUtil.convertToLocalDateTime(ticket.getOutTime()))
+                .toMinutes();
         // check if he can benefit from free parking
         if(duration > freeMinutes) {
             double fareCarePerMinute = Fare.CAR_RATE_PER_HOUR / 60;
             double fareBikePerMinute = Fare.BIKE_RATE_PER_HOUR / 60;
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
-                    ticket.setPrice(duration * fareCarePerMinute);
+                    ticket.setPrice(getTotal(duration * fareCarePerMinute, ticket.getDiscount()));
                     break;
                 }
                 case BIKE: {
-                    ticket.setPrice(duration * fareBikePerMinute);
+                    ticket.setPrice(getTotal(duration * fareBikePerMinute, ticket.getDiscount()));
                     break;
                 }
                 default:
@@ -40,5 +40,9 @@ public class FareCalculatorService {
         }else{
             ticket.setPrice(0);
         }
+    }
+
+    private double getTotal(double price, double discount){
+        return discount > 0 ? price - (price * discount/100 ) : price;
     }
 }

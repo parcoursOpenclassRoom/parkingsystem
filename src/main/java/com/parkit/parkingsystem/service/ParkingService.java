@@ -38,9 +38,13 @@ public class ParkingService {
                 String vehicleRegNumber = getVehichleRegNumber();
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
-
+                double discount = checkVehichleEntitledPercentage(vehicleRegNumber);
                 Date inTime = new Date();
                 Ticket ticket = new Ticket();
+                if(discount > 0){
+                    System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a "+discount+"% discount.");
+                    ticket.setDiscount(discount);
+                }
                 //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
                 //ticket.setId(ticketID);
                 ticket.setParkingSpot(parkingSpot);
@@ -61,6 +65,14 @@ public class ParkingService {
     private String getVehichleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
+    }
+
+    public double checkVehichleEntitledPercentage(String vehicleRegNumber){
+        Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+        double discount = 0;
+        if(ticket != null)
+            discount = 5;
+        return discount;
     }
 
     /**
@@ -112,9 +124,6 @@ public class ParkingService {
             String vehicleRegNumber = getVehichleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
-            // if the exit time is equal to the entry time, a minute is added for billing
-            if(outTime.before(ticket.getInTime()))
-                outTime = DateUtils.addMinutes(outTime,1);
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket);
             if(ticketDAO.updateTicket(ticket)) {

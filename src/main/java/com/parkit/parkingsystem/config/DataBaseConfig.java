@@ -3,17 +3,19 @@ package com.parkit.parkingsystem.config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.sql.*;
 
 public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
+    public Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
         logger.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
+        PropertiesConfig propertiesConfig = new PropertiesConfig();
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/prod?serverTimezone=UTC","root","Bationo2020");
+                propertiesConfig.getConnectionURL(),propertiesConfig.getUsername(),propertiesConfig.getPassword());
     }
 
     public void closeConnection(Connection con){
