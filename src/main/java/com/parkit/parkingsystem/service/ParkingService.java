@@ -67,7 +67,7 @@ public class ParkingService {
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
-    private double checkVehichleEntitledPercentage(String vehicleRegNumber){
+    public double checkVehichleEntitledPercentage(String vehicleRegNumber){
         Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
         double discount = 0;
         if(ticket != null)

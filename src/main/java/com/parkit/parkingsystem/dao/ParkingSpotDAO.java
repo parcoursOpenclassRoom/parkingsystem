@@ -29,8 +29,10 @@ public class ParkingSpotDAO {
             }
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
-        }catch (Exception ex){
-            logger.error("Error fetching next available slot",ex);
+        }catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error fetching next available slot",e);
         }finally {
             dataBaseConfig.closeConnection(con);
         }
@@ -48,11 +50,14 @@ public class ParkingSpotDAO {
             int updateRowCount = ps.executeUpdate();
             dataBaseConfig.closePreparedStatement(ps);
             return (updateRowCount == 1);
-        }catch (Exception ex){
-            logger.error("Error updating parking info",ex);
+        }catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error fetching next available slot",e);
             return false;
         }finally {
-            dataBaseConfig.closeConnection(con);
+            if(con != null)
+                dataBaseConfig.closeConnection(con);
         }
     }
 
