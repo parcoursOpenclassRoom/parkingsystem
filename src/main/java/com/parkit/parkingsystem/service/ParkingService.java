@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.service;
 
+import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -71,7 +72,7 @@ public class ParkingService {
         Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
         double discount = 0;
         if(ticket != null)
-            discount = 5;
+            discount = Fare.RATE_DISCOUNT;
         return discount;
     }
 
