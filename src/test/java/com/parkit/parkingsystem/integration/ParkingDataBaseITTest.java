@@ -84,9 +84,11 @@ public class ParkingDataBaseITTest {
     public void testParkingARecurrenceForDiscount() throws Exception {
         // first visit
         testParkingLotExit();
+        Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
+        assertEquals(0,ticket.getDiscount());
         // next visit
         testParkingLotExit();
-        Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
+         ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
 
         assertEquals(5,ticket.getDiscount());
     }
