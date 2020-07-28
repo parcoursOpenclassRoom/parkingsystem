@@ -47,3 +47,8 @@ The app has unit tests and integration tests written. More of these need to be a
 To run the tests from maven, go to the folder that contains the pom.xml file and execute the below command.
 
 `mvn test`
+
+### The final Jar file
+
+`mvn package`
+`jar tf target/parking-system.jar`
